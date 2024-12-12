@@ -16,11 +16,11 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: 'db.env',
+      envFilePath: '.env',
     }),
     KeycloakConnectModule.register({
-      authServerUrl: 'http://localhost:8080', 
-      realm: 'lab-4-5',
+      authServerUrl: 'http://localhost:8080/auth', 
+      realm: 'nest-app',
       clientId: 'nest-app',
       secret: 'HIUuBcqn0XmFn3Nzl1X2Vbjy2OSD77Bu', 
     }),

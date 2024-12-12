@@ -5,6 +5,7 @@ import { Category } from './category.entity';
 import { CategoriesService } from './categories.service';
 import { Meta } from '../meta/meta.entity'
 import { Product } from '../products/products.entity'
+import { Roles } from 'nest-keycloak-connect';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -45,6 +46,7 @@ export class CategoriesController {
     // }
   })
   @ApiResponse({ status: 404, description: 'No categories found' })
+  @Roles({ roles: ['admin', 'categories-admins', 'users'] })
   index(@Query('page') page = 1, @Query('limit') limit = 10): Promise<Pagination<Category>> {
     return this.categoriesService.paginate({ limit, page });
   }
@@ -65,6 +67,7 @@ export class CategoriesController {
         "updated_at": "2024-12-11T18:23:25.390Z"
       }
     })
+    @Roles({ roles: ['admin', 'categories-admins'] })
   store(@Body() categoryData: Category): Promise<Category> {
     return this.categoriesService.create(categoryData);
   }
@@ -90,6 +93,7 @@ export class CategoriesController {
     ],
   })
   @ApiResponse({ status: 404, description: 'Category not found' })
+  @Roles({ roles: ['admin', 'categories-admins', 'users'] })
   getProductsByCategory(@Param('categoryId') categoryId: number): Promise<Product[]> {
     return this.categoriesService.findProductsByCategory(categoryId);
   }
@@ -110,6 +114,7 @@ export class CategoriesController {
     }
   })
   @ApiResponse({ status: 404, description: 'Category not found' })
+  @Roles({ roles: ['admin', 'categories-admins', 'users'] })
   show(@Param('categoryId') id: number): Promise<Category | null> {
     return this.categoriesService.findOne(id);
   }
@@ -128,6 +133,7 @@ export class CategoriesController {
       "updated_at": "2024-12-11T20:34:58.270Z"
     }
   })
+  @Roles({ roles: ['admin', 'categories-admins'] })
   update(@Param('categoryId') id: number, @Body() categoryData: Category): Promise<Category> {
     return this.categoriesService.update(id, categoryData);
   }
@@ -136,6 +142,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Delete a specific category' })
   @ApiParam({ name: 'categoryId' })
   @ApiResponse({ status: 204, description: 'Category deleted successfully' })
+  @Roles({ roles: ['admin', 'categories-admins'] })
   delete(@Param('categoryId') id: number): void {
     const deleted = this.categoriesService.remove(id);
     if (!deleted) {
